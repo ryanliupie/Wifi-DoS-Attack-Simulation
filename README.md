@@ -9,4 +9,4 @@
 <hr>
 
 ## Components 
-- <h3> <a href=""> </a></h3>
+- <h3> <a href="/Dos/parts.md"> Physical Parts </a> </h3>
