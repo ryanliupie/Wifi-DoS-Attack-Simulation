@@ -5,6 +5,6 @@
 
 <img src="/pictures/kali.JPG" alt="VM" width="950px">
 <p>
-  Now if we take a look, our host operating system is Windows. This is what manages all the software and hardware within my computer. Most people usually use a computer with Windows as it is very easy to use. Now, if we take a look at the application open on the left, it says <b> Kali Linux </b>. This is also another type of OS, however, this is a Linux distribution different from Windows. The reason I am using Kali Linux for my VM is because it is mainly used for digital forensics and penetration testing which I will be using. 
+  Now if we take a look, our host operating system is Windows. This is what manages all the software and hardware within my computer. Most people usually use a computer with Windows as it is very easy to use. Now, if we take a look at the application open on the left, it says <b> Kali Linux </b>. This is also another type of OS, however, this is a Linux distribution different from Windows. The reason I am using Kali Linux for my VM is because it is mainly used for digital forensics and penetration testing which I will be conducting. 
 </p>
 
