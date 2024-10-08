@@ -43,6 +43,12 @@ def run_command():
     except subprocess.CalledProcessError as e:
         logging.error(f"Command failed: {' '.join(command)}\nError: {e}")
         return None
-# If error, then time-out and reserves it as e
+# If error, then time-out and reserves it as e (why failure occured)
 # We log this error with "command failed" and displays which command fails 
-# These components allow a shell command to be executed and handles error with execuation of commands that may occur
+# These components allow a shell command to be executed and handles error with execution of commands that may occur
+
+def is_essid_present(essid, lst): 
+    return not any(essid in item["ESSID"] for item in lst)
+# This checks if a given ESSID (Extended Service Set Identifer) which represents the name of a wireless network, it already present in the list of access points 
+# If ESSID  is found in list (network is available), returns 'false" as we do not need to add to avoid duplication 
+# If ESSID is not found, returns "true" as you can add ESSID to list 
