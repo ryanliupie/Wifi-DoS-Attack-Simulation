@@ -23,3 +23,12 @@ import time
 # This is a timer to pause activites before activating them again
 
 
+logging.basicConfig(level=logging.INFO)
+# Set the logging level (Emily Always Calls Eric When Network Is Down)
+# Emergency, Alert, Critical, Error, Warning, Notice, Information, Debug
+# Set log level to INFO for general updates
+
+active_wifi-connections = []
+# Create list for wireless networks 
+
+
