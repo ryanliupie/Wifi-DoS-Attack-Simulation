@@ -31,4 +31,18 @@ logging.basicConfig(level=logging.INFO)
 active_wifi_connections = []
 # Create list for wireless networks 
 
+def clear_screen():
+    subprocess.call("Clear", shell = True)
+# This resets the terminal output, so that the user can view clean updated network data
 
+def run_command():
+    try:
+        result = subprocess.run(command, capture_output = True, check = True)
+        return result.stdout.decode()
+# We will attempt to run a command to see if it works and return output (true) if it goes through with .stdout   
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Command failed: {' '.join(command)}\nError: {e}")
+        return None
+# If error, then time-out and reserves it as e
+# We log this error with "command failed" and displays which command fails 
+# These components allow a shell command to be executed and handles error with execuation of commands that may occur
