@@ -5,7 +5,7 @@
 
 import csv 
 # this type of file (CSV) contains rows, this will help us read those rows easier. 
-import datetime
+from datetime import datetime
 # This will help keep track of the time and date in case we need to such as backing up a copy
 import logging
 # Tracks specific events that occur when program runs (0-7 levels)
