@@ -28,7 +28,7 @@ logging.basicConfig(level=logging.INFO)
 # Emergency, Alert, Critical, Error, Warning, Notice, Information, Debug
 # Set log level to INFO for general updates
 
-active_wifi-connections = []
+active_wifi_connections = []
 # Create list for wireless networks 
 
 
