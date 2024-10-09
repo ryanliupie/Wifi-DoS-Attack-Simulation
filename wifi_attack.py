@@ -52,3 +52,55 @@ def is_essid_present(essid, lst):
 # This checks if a given ESSID (Extended Service Set Identifer) which represents the name of a wireless network, it already present in the list of access points 
 # If ESSID  is found in list (network is available), returns 'false" as we do not need to add to avoid duplication 
 # If ESSID is not found, returns "true" as you can add ESSID to list 
+
+def check_superuser(): 
+    if os.geteuid() != 0: 
+        logging.error("Script must run with Sudo")
+        exit(1)
+# This ensures the program is ran with superuser/superadmin/root privileges for elevated permissions to perform tasks
+# If user is not 0, (!=) then it logs an error that it must run with "Sudo" superuser do
+# EUID must be 0 
+
+def archive_csv_files():
+    with tempfile.TemporaryDirectory() as temp_backup_dir:
+        for current_file in os.listdir():
+            if current_file.endswith(".csv"):
+                logging.info("Moving existing .csv files to backup directory")
+                shutil.move(current_file, os.path.join(temp_backup_dir, f"{datetime.now()}-{current_file}"))
+# This function moves .csv files in current directory to a temporary backup 
+# backs up existing files to prevent overwrite and auto deletes temp using "with"
+# Ensures only recent file remain in main directory, avoiding conflict if new files are created
+
+def discover_wireless_adapters():
+    adapter_pattern = re.compile("^wlan[0-9]+")
+#can be "wlan0", cannot be "eth0" or "wlan-0" as it does not follow pattern
+    iwconfig_output = run_command(["iwconfig"])
+    wireless_interfaces = adapter_pattern.findall(iwconfig_output)
+    if not wireless_interfaces:
+        logging.error("No Wi-Fi adapters available. Connect one and try again")
+        exit(1)
+    return(wireless_interfaces)
+# This finds/detects wireless interfaces on a system 
+# We use re module to compile a regular expression of only "wlan" and "0 to 9" such as "wlan5"
+# Run iwconfig to get wireless interface information 
+# if not wireless interfaces = no wireless interfaces --> log as error with text for clarity
+# exit (1) as in signals error --> script does not keep running, preventing loop
+
+def terminate_conflicting_processes(): 
+    logging.info("Terminating conflicting processes")
+    run_command(["airmon-ng", "sudo", "check", "terminate"])
+# Used for terminating any processes that coflict with "airmon-ng" which this is used to manage wireless networks
+# We will log this at level 6 as script will terminate conflicting process
+# Run command to verify if process was terminated 
+
+
+
+
+
+
+
+
+
+
+
+
