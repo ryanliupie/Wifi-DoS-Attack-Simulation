@@ -191,7 +191,7 @@ if __name__ == "__main__":
 
     target_network = set_target_network()
     perform_dos_attack(selected_interface, target_network["BSSID"], target_network["channel"].strip())
-
+# DoS attack is initated 
 
 
 
