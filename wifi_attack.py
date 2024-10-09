@@ -118,8 +118,54 @@ def scan_networks(interface):
         process.terminate()
 # This is a loop meant for continuously displaying detected wireless access points per 3 seconds reducing cpu usage
 # When targeted SSID is met, we must stop it with "KeybaordInterrupt" -- Ctrl+C
-# As airodump-ng (network scan) was started as background process with "Popen", we can terminate it freeeing up the wireless interface to conduct further actions 
-#             
+# As airodump-ng (network scan) was started as background process with "Popen", we can terminate it freeing up the wireless interface to conduct further actions 
+
+
+def load_access_points():
+    headers = ["BSSID", "ESSID", "First_time_seen", "Last_time_seen", "Authentication", "Cipher", "Privacy", "Speed", "channel", "beacons", "Power", "IV", "ID_Length", "Key"]
+    for file_name in os.listdir():
+        with open(file_name) as csv_file:
+            csv_file.seek(0)
+            csv_reader = csv.DictReader(csv_file, headers = headers)
+            for row in csv_reader:
+                if row["BSSID"] != "BSSID" and row["BSSID"] != "Station MAC" and check_for_essid(row["ESSID"], active_wifi_connections):
+                    active_wifi_connections.append(row)
+# reads information about detected wireless networks from .csv file created by airodump-ng in a list we initially created "active_wifi_connections"
+# headers --> list of expected columns from .csv file to types of data collected by airodump-ng
+# Filter out files ending with only .csv and certain headers for displaying relevant information in list
+# Process each row with "csv_reader" and filter out column headers suggested 
+# If current SSID is not in list, returns "True" and adds network to list. Returns "False" if network is already in list to prevent duplication 
+
+def show_access_points():
+    print("Num |\tBSSID|\tChannel\tESSID")
+    print("___|\t____________|\t________|\t____________")
+    for index, ap in enumerate(active_wifi_connections):
+        print(f"{index}\t{ap["BSSID"]}\t{ap["channel"].strip()}\t\t{ap["ESSID"]}")
+# Once networks are detected, we can display the networks in a formatted list 
+# Such that, it will display, number of what network it is, "0,1,2,3,4", BSSID, channel(1,6,11 are common for 2.4Ghz), ESSID
+# long \t refers to "tabs" to align column, in this case it goes 3,12,8,12
+# To format data is a row, we use the enumerate function to provide index, and network data "ap"
+
+def set_target_network(): 
+    while True:
+        try:
+            selection = int(input("Please select a choice: "))
+            if active_wifi_connections[choice]:
+                return active_wifi_connections[choice]
+        except (ValueError, IndexError):
+            print("Invalid choice, please trt again. ")
+# Now, we must choose a network to perform the attack 
+# A person must choose based off "int" meaning they can choose "1,2,3,4" as that interprets at "Num" or "index" from previous function(number corresponds to networks Num/index)
+# If chosen, returns the network chose, if choice resolves to an error, user entered something different than "int" such as "2,34" or "number1"
+
+perform_dos_attack():
+
+
+
+
+
+
+
 
 
 
