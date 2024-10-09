@@ -93,6 +93,34 @@ def terminate_conflicting_processes():
 # We will log this at level 6 as script will terminate conflicting process
 # Run command to verify if process was terminated 
 
+def enable_monitor_mode(interface):
+    logging.info(f"Starting monitor mode{interface}")
+    run_command(["sudo", "airmon-ng", "check", "terminate"])
+# Places wireless network interface into "monitor mode" allowing the wireless adapter to listen/capture wireless traffic
+# Log at level 6 that monitor mode will begin along with the specific interface such as "wlan3"
+
+def scan_networks(interface):
+    logging.info(f"Scanning for networks on {interface}")
+    process = subprocess.Popen(["sudo", "airdump-ng", "-w", "file", "--write-interval", "1", "--output-format", "csv", f"{interface}mon"],
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+# Responsible for scanning close wireless networks using wireless interface that was put in monitor mode previously
+# "Popen" starts the command and executes the rest of the script; allows commands to run in backround as network scanning is being conducted 
+# stdout.DEVNULL will redirect standard output; silencing it to avoid clutter
+# stderr- does the same thing, ensuring no error messages from "airodump" are displayed in the terminal
+    try:
+        while True:
+            clear_screen()
+            load_access_points()
+            display_access_points()
+            time.sleep(3)
+    except KeyboardInterrupt:
+        logging.info("Select target network")
+        process.terminate()
+# This is a loop meant for continuously displaying detected wireless access points per 3 seconds reducing cpu usage
+# When targeted SSID is met, we must stop it with "KeybaordInterrupt" -- Ctrl+C
+# As airodump-ng (network scan) was started as background process with "Popen", we can terminate it freeeing up the wireless interface to conduct further actions 
+#             
+
 
 
 
