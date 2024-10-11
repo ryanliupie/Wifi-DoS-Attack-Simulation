@@ -145,7 +145,7 @@ def show_access_points():
     print("Num |\tBSSID|\tChannel\tESSID")
     print("___|\t____________|\t________|\t____________")
     for index, ap in enumerate(active_wifi_connections):
-        print(f"{index}\t{ap["BSSID"]}\t{ap["channel"].strip()}\t\t{ap["ESSID"]}")
+        print(f"{index}\t{ap['BSSID']}\t{ap['channel'].strip()}\t\t{ap['ESSID']}")
 # Once networks are detected, we can display the networks in a formatted list 
 # Such that, it will display, number of what network it is, "0,1,2,3,4", BSSID, channel(1,6,11 are common for 2.4Ghz), ESSID
 # long \t refers to "tabs" to align column, in this case it goes 3,12,8,12
