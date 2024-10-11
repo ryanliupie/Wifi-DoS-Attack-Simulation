@@ -5,6 +5,10 @@
 
 import csv 
 # this type of file (CSV) contains rows, this will help us read those rows easier. 
+import ctypes
+
+import sys
+
 from datetime import datetime
 # This will help keep track of the time and date in case we need to such as backing up a copy
 import logging
@@ -35,7 +39,7 @@ def clear_screen():
     subprocess.call("Clear", shell = True)
 # This resets the terminal output, so that the user can view clean updated network data
 
-def run_command():
+def run_command(command):
     try:
         result = subprocess.run(command, capture_output = True, check = True)
         return result.stdout.decode()
@@ -54,9 +58,10 @@ def is_essid_present(essid, lst):
 # If ESSID is not found, returns "true" as you can add ESSID to list 
 
 def check_superuser(): 
-    if os.geteuid() != 0: 
-        logging.error("Script must run with Sudo")
-        exit(1)
+    if os.name == "nt": 
+        if not ctypes.windll.shell32.IsUserAnAdmin():
+            print("Please run as an administrator before running script")
+            sys.exit(1)
 # This ensures the program is ran with superuser/superadmin/root privileges for elevated permissions to perform tasks
 # If user is not 0, (!=) then it logs an error that it must run with "Sudo" superuser do
 # EUID must be 0 
@@ -111,7 +116,7 @@ def scan_networks(interface):
         while True:
             clear_screen()
             load_access_points()
-            display_access_points()
+            show_access_points()
             time.sleep(3)
     except KeyboardInterrupt:
         logging.info("Select target network")
@@ -128,7 +133,7 @@ def load_access_points():
             csv_file.seek(0)
             csv_reader = csv.DictReader(csv_file, headers = headers)
             for row in csv_reader:
-                if row["BSSID"] != "BSSID" and row["BSSID"] != "Station MAC" and check_for_essid(row["ESSID"], active_wifi_connections):
+                if row["BSSID"] != "BSSID" and row["BSSID"] != "Station MAC" and is_essid_present(row["ESSID"], active_wifi_connections):
                     active_wifi_connections.append(row)
 # reads information about detected wireless networks from .csv file created by airodump-ng in a list we initially created "active_wifi_connections"
 # headers --> list of expected columns from .csv file to types of data collected by airodump-ng
@@ -150,10 +155,10 @@ def set_target_network():
     while True:
         try:
             selection = int(input("Please select a choice: "))
-            if active_wifi_connections[choice]:
-                return active_wifi_connections[choice]
+            if active_wifi_connections[set_target_network]:
+                return active_wifi_connections[set_target_network]
         except (ValueError, IndexError):
-            print("Invalid choice, please trt again. ")
+            print("Invalid choice, please try again. ")
 # Now, we must choose a network to perform the attack 
 # A person must choose based off "int" meaning they can choose "1,2,3,4" as that interprets at "Num" or "index" from previous function(number corresponds to networks Num/index)
 # If chosen, returns the network chose, if choice resolves to an error, user entered something different than "int" such as "2,34" or "number1"
