@@ -93,14 +93,14 @@ def discover_wireless_adapters():
 
 def terminate_conflicting_processes(): 
     logging.info("Terminating conflicting processes")
-    run_command(["airmon-ng", "sudo", "check", "terminate"])
+    run_command(["sudo", "airmon-ng", "check", "kill"])
 # Used for terminating any processes that coflict with "airmon-ng" which this is used to manage wireless networks
 # We will log this at level 6 as script will terminate conflicting process
 # Run command to verify if process was terminated 
 
 def enable_monitor_mode(interface):
     logging.info(f"Starting monitor mode{interface}")
-    run_command(["sudo", "airmon-ng", "check", "terminate"])
+    run_command(["sudo", "airmon-ng", "start", interface])
 # Places wireless network interface into "monitor mode" allowing the wireless adapter to listen/capture wireless traffic
 # Log at level 6 that monitor mode will begin along with the specific interface such as "wlan3"
 
@@ -190,7 +190,7 @@ if __name__ == "__main__":
 # User selects iterface of interest and program stores it
 
     terminate_conflicting_processes()
-    enable_monitor_mode()
+    enable_monitor_mode(selected_interface)
     scan_networks(selected_interface)
 # This prepares for the attack by eliminating processes that conflict with monitor mode such as network manager, places wireless interface into monitor mode, scans close networks using "airodump-ng" displaying such headers 
 
