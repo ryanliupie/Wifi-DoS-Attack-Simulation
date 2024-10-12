@@ -145,10 +145,14 @@ def load_access_points():
 # If current SSID is not in list, returns "True" and adds network to list. Returns "False" if network is already in list to prevent duplication 
 
 def show_access_points():
-    print("Num |\tBSSID|\tChannel\tESSID")
-    print("___|\t____________|\t________|\t____________")
+    print("Num |\tBSSID              |\tChannel|\tESSID")
+    print("___ |\t___________________|\t_______|\t______________________________")
     for index, ap in enumerate(active_wifi_connections):
-        print(f"{index}\t{ap['BSSID']}\t{ap['channel'].strip()}\t\t{ap['ESSID']}")
+        # Use 'Unknown' if channel or ESSID is None
+        channel = (ap['channel'] or 'Unknown').strip()
+        essid = ap['ESSID'] or 'Hidden'
+        print(f"{index}\t{ap['BSSID']}\t{channel}\t\t{essid}")
+
 # Once networks are detected, we can display the networks in a formatted list 
 # Such that, it will display, number of what network it is, "0,1,2,3,4", BSSID, channel(1,6,11 are common for 2.4Ghz), ESSID
 # long \t refers to "tabs" to align column, in this case it goes 3,12,8,12
