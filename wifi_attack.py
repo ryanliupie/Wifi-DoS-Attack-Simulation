@@ -137,7 +137,7 @@ def load_access_points():
                 for row in csv_reader:
                     if row["BSSID"] != "BSSID" and row["BSSID"] != "Station MAC" and is_essid_present(row["ESSID"], active_wifi_connections):
                         active_wifi_connections.append(row)
-
+                        print(f"Added network: {row.get('ESSID', 'Hidden')} on channel {row.get('channel', 'Unknown')}")
 # reads information about detected wireless networks from .csv file created by airodump-ng in a list we initially created "active_wifi_connections"
 # headers --> list of expected columns from .csv file to types of data collected by airodump-ng
 # Filter out files ending with only .csv and certain headers for displaying relevant information in list
