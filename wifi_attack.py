@@ -36,7 +36,7 @@ active_wifi_connections = []
 # Create list for wireless networks 
 
 def clear_screen():
-    subprocess.call("Clear", shell = True)
+    subprocess.call("clear", shell = True)
 # This resets the terminal output, so that the user can view clean updated network data
 
 def run_command(command):
