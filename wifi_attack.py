@@ -129,12 +129,15 @@ def scan_networks(interface):
 def load_access_points():
     headers = ["BSSID", "ESSID", "First_time_seen", "Last_time_seen", "Authentication", "Cipher", "Privacy", "Speed", "channel", "beacons", "Power", "IV", "ID_Length", "Key"]
     for file_name in os.listdir():
-        with open(file_name) as csv_file:
-            csv_file.seek(0)
-            csv_reader = csv.DictReader(csv_file, headers = headers)
-            for row in csv_reader:
-                if row["BSSID"] != "BSSID" and row["BSSID"] != "Station MAC" and is_essid_present(row["ESSID"], active_wifi_connections):
-                    active_wifi_connections.append(row)
+        # Check if it is a file and ends with .csv
+        if os.path.isfile(file_name) and file_name.endswith(".csv"):
+            with open(file_name) as csv_file:
+                csv_file.seek(0)
+                csv_reader = csv.DictReader(csv_file, headers)
+                for row in csv_reader:
+                    if row["BSSID"] != "BSSID" and row["BSSID"] != "Station MAC" and is_essid_present(row["ESSID"], active_wifi_connections):
+                        active_wifi_connections.append(row)
+
 # reads information about detected wireless networks from .csv file created by airodump-ng in a list we initially created "active_wifi_connections"
 # headers --> list of expected columns from .csv file to types of data collected by airodump-ng
 # Filter out files ending with only .csv and certain headers for displaying relevant information in list
