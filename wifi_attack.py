@@ -108,8 +108,14 @@ def scan_networks(interface):
     logging.info(f"Scanning for networks on {interface}")
     process = subprocess.Popen(["sudo", "airodump-ng", "-w", "file", "--write-interval", "1", "--output-format", "csv", f"{interface}mon"],
                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    time.sleep(5)
-    process.terminate()
+    try:
+        while True:
+            time.sleep(10)  # Adjust the time interval based on the needed update frequency
+            load_access_points()
+            show_access_points()
+    except KeyboardInterrupt:
+        logging.info("Scan interrupted by user.")
+        process.terminate()
 # Responsible for scanning close wireless networks using wireless interface that was put in monitor mode previously
 # "Popen" starts the command and executes the rest of the script; allows commands to run in backround as network scanning is being conducted 
 # stdout.DEVNULL will redirect standard output; silencing it to avoid clutter
